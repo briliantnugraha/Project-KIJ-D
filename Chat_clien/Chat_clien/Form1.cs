@@ -15,6 +15,7 @@ namespace Chat_clien
 {
     public partial class Form1 : Form
     {
+        String nama;
         public Form1()
         {
             InitializeComponent();
@@ -32,7 +33,10 @@ namespace Chat_clien
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            nama = Pengirim.Text;
+            ipServer.Text = "";
+            portServer.Text = "";
+            Pengirim.Text = "";
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -42,7 +46,9 @@ namespace Chat_clien
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            listBox1.Items.Add(nama+ ": " + Pesan.Text);
+            Pesan.Text = "";
+            Penerima.Text = "";
         }
     }
 }

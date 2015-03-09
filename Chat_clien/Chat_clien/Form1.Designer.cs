@@ -29,22 +29,22 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.ipServer = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.portServer = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ipServer = new System.Windows.Forms.TextBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.nameSender = new System.Windows.Forms.TextBox();
+            this.Pengirim = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.message = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.nameReceiver = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.Pesan = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.Penerima = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -61,30 +61,6 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Server";
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(13, 120);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(278, 95);
-            this.listBox1.TabIndex = 1;
-            // 
-            // ipServer
-            // 
-            this.ipServer.Location = new System.Drawing.Point(75, 19);
-            this.ipServer.Name = "ipServer";
-            this.ipServer.Size = new System.Drawing.Size(100, 20);
-            this.ipServer.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(17, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "IP";
             // 
             // label2
             // 
@@ -104,6 +80,30 @@
             this.portServer.TabIndex = 2;
             this.portServer.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(17, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(17, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "IP";
+            // 
+            // ipServer
+            // 
+            this.ipServer.Location = new System.Drawing.Point(75, 19);
+            this.ipServer.Name = "ipServer";
+            this.ipServer.Size = new System.Drawing.Size(100, 20);
+            this.ipServer.TabIndex = 0;
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(13, 120);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(278, 95);
+            this.listBox1.TabIndex = 1;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -113,12 +113,12 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "Chat As";
             // 
-            // nameSender
+            // Pengirim
             // 
-            this.nameSender.Location = new System.Drawing.Point(300, 32);
-            this.nameSender.Name = "nameSender";
-            this.nameSender.Size = new System.Drawing.Size(100, 20);
-            this.nameSender.TabIndex = 4;
+            this.Pengirim.Location = new System.Drawing.Point(300, 32);
+            this.Pengirim.Name = "Pengirim";
+            this.Pengirim.Size = new System.Drawing.Size(100, 20);
+            this.Pengirim.TabIndex = 4;
             // 
             // button1
             // 
@@ -152,47 +152,15 @@
             // 
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.message);
+            this.groupBox2.Controls.Add(this.Pesan);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.nameReceiver);
+            this.groupBox2.Controls.Add(this.Penerima);
             this.groupBox2.Location = new System.Drawing.Point(13, 221);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(387, 114);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Send Message";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 49);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Message";
-            // 
-            // message
-            // 
-            this.message.Location = new System.Drawing.Point(75, 46);
-            this.message.Name = "message";
-            this.message.Size = new System.Drawing.Size(306, 20);
-            this.message.TabIndex = 2;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(17, 22);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 13);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Receiver";
-            // 
-            // nameReceiver
-            // 
-            this.nameReceiver.Location = new System.Drawing.Point(75, 19);
-            this.nameReceiver.Name = "nameReceiver";
-            this.nameReceiver.Size = new System.Drawing.Size(100, 20);
-            this.nameReceiver.TabIndex = 0;
             // 
             // button3
             // 
@@ -203,6 +171,38 @@
             this.button3.Text = "Send !";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(17, 49);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(50, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Message";
+            // 
+            // Pesan
+            // 
+            this.Pesan.Location = new System.Drawing.Point(75, 46);
+            this.Pesan.Name = "Pesan";
+            this.Pesan.Size = new System.Drawing.Size(306, 20);
+            this.Pesan.TabIndex = 2;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(17, 22);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(50, 13);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Receiver";
+            // 
+            // Penerima
+            // 
+            this.Penerima.Location = new System.Drawing.Point(75, 19);
+            this.Penerima.Name = "Penerima";
+            this.Penerima.Size = new System.Drawing.Size(100, 20);
+            this.Penerima.TabIndex = 0;
             // 
             // Form1
             // 
@@ -215,7 +215,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.nameSender);
+            this.Controls.Add(this.Pengirim);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -237,16 +237,16 @@
         private System.Windows.Forms.TextBox ipServer;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox nameSender;
+        private System.Windows.Forms.TextBox Pengirim;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox message;
+        private System.Windows.Forms.TextBox Pesan;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox nameReceiver;
+        private System.Windows.Forms.TextBox Penerima;
     }
 }
 
