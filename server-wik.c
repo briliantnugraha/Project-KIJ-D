@@ -102,6 +102,23 @@ void insert(const char *nama, int sock, Klien **node) {
 	}
 }
 
+void delete(const char *nama, Klien **node) {
+	if ((*node)->next == NULL) {
+		free(*node);
+		*node = NULL;
+	}
+	else {
+		Klien* iterator = *node;
+		while(iterator->next != NULL && strcmp(iterator->next->nama, nama)) {
+			iterator = iterator->next;
+		}
+		if (iterator->next != NULL) {
+			Klien* temp = iterator->next->next;
+			free(iterator->next);
+			iterator->next = temp;
+		}
+	}
+}
 
 
 void *run(void *t_args) {
@@ -145,6 +162,9 @@ void *run(void *t_args) {
 		else {
 			strcpy(buf, "NOPE\r\n\0");
 			send(args->sock, buf, strlen(buf), 0);
+			close(args->sock);
+			free(args);
+			pthread_exit(NULL);
 		}
 	}
 
@@ -156,19 +176,28 @@ void *run(void *t_args) {
 			if (indexTD <= 50) {
 				strncpy(namaPenerima, buf, indexTD);
 			}
+			strcpy(msg, titikdua+1);
+
 			namaPenerima[indexTD] = 0;
 			int searchResult = search(namaPenerima, daftarKlien);
 			if (searchResult == -1) {
-				sprintf(buf, "%s tidak online\r\n", namaPenerima);
+				sprintf(buf, "NOPE\r\n", namaPenerima);
 				send(args->sock, buf, strlen(buf), 0);
 			}
 			else {
-				sprintf(buf, "%s memiliki nomor socket %d\r\n", namaPenerima, searchResult);
-				send(args->sock, buf, strlen(buf), 0);
+				sprintf(buf, "%s:%s\r\n", nama, msg);
+				send(searchResult, buf, strlen(buf), 0);
 			}
 		}
 	}
 	close(args->sock);
+	delete(nama, &daftarKlien);
+	sprintf(buf, "!DISCONNECT %s\r\n", nama);
+	Klien* node = daftarKlien;
+	while (node != NULL) {
+		send(node->sock, buf, strlen(buf), 0);
+		node = node->next;
+	}
 	free(args);
 	pthread_exit(NULL);
 }
