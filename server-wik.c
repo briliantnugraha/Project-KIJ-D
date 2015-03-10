@@ -99,13 +99,15 @@ void insert(const char *nama, int sock, Klien **node) {
 		iterator->next = (Klien*) malloc (sizeof(Klien));
 		strcpy(iterator->next->nama, nama);
 		iterator->next->sock = sock;
+		iterator->next->next = NULL;
 	}
 }
 
 void delete(const char *nama, Klien **node) {
-	if ((*node)->next == NULL) {
-		free(*node);
-		*node = NULL;
+	if (strcmp((*node)->nama, nama) == 0) {
+		Klien* temp = *node;
+		*node = (*node)->next;
+		free(temp);
 	}
 	else {
 		Klien* iterator = *node;
@@ -119,7 +121,6 @@ void delete(const char *nama, Klien **node) {
 		}
 	}
 }
-
 
 void *run(void *t_args) {
 	thread_args_t *args = (thread_args_t*) t_args;
