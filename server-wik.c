@@ -22,7 +22,7 @@ typedef struct k {
 	struct k* next;
 } Klien;
 
-Klien daftarKlien;
+Klien *daftarKlien = NULL;
 
 short isAlphaNumeric(char c) {
 	return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
@@ -84,6 +84,25 @@ int search(const char *nama, Klien *node) {
 	else return -1;
 }
 
+void insert(const char *nama, int sock, Klien **node) {
+	if (*node == NULL) {
+		*node = (Klien*) malloc(sizeof(Klien));
+		strcpy((*node)->nama, nama);
+		(*node)->sock = sock;
+		(*node)->next = NULL;
+	}
+	else {
+		Klien* iterator = *node;
+		while (iterator->next != NULL) {
+			iterator = iterator->next;
+		}
+		iterator->next = (Klien*) malloc (sizeof(Klien));
+		strcpy(iterator->next->nama, nama);
+		iterator->next->sock = sock;
+	}
+}
+
+
 
 void *run(void *t_args) {
 	thread_args_t *args = (thread_args_t*) t_args;
@@ -92,9 +111,9 @@ void *run(void *t_args) {
 	int bytes, len1;
 
 	//kirim daftar user
-	strcpy(buf, "OK\r\n");
+	strcpy(buf, "OK\r\n\0");
 	send(args->sock, buf, strlen(buf), 0);
-	Klien *iterator = &daftarKlien;
+	Klien *iterator = daftarKlien;
 	while (iterator != NULL) {
 		sprintf(buf, "!CONNECT %s\r\n", iterator->nama);
 		send(args->sock, buf, strlen(buf), 0);
@@ -110,14 +129,21 @@ void *run(void *t_args) {
 		buf[i] = 0;
 		//selesai trimming
 		strncpy(nama, buf, MAX_NAMELEN-1);
-		int searchResult = search(nama, &daftarKlien);
+		int searchResult = search(nama, daftarKlien);
 		if (searchResult == -1) {
-			strcpy(buf, "OK\r\n");
+			strcpy(buf, "OK\r\n\0");
 			send(args->sock, buf, strlen(buf), 0);
+			sprintf(buf, "!CONNECT %s\r\n", nama);
+			Klien* node = daftarKlien;
+			while (node != NULL) {
+				send(node->sock, buf, strlen(buf), 0);
+				node = node->next;
+			}
+			insert(nama, args->sock, &daftarKlien);
 			break;
 		}
 		else {
-			strcpy(buf, "NOPE\r\n");
+			strcpy(buf, "NOPE\r\n\0");
 			send(args->sock, buf, strlen(buf), 0);
 		}
 	}
@@ -131,7 +157,7 @@ void *run(void *t_args) {
 				strncpy(namaPenerima, buf, indexTD);
 			}
 			namaPenerima[indexTD] = 0;
-			int searchResult = search(namaPenerima, &daftarKlien);
+			int searchResult = search(namaPenerima, daftarKlien);
 			if (searchResult == -1) {
 				sprintf(buf, "%s tidak online\r\n", namaPenerima);
 				send(args->sock, buf, strlen(buf), 0);
@@ -142,7 +168,7 @@ void *run(void *t_args) {
 			}
 		}
 	}
-
+	close(args->sock);
 	free(args);
 	pthread_exit(NULL);
 }
@@ -153,8 +179,6 @@ int main (int argc, char* argv[]) {
 		exit(-1);
 	}
 //--------------------------------------------------
-	Klien *node = &daftarKlien;
-	populate(node);
 
 	int status;
 	int sockfd, new_fd;
@@ -168,8 +192,11 @@ int main (int argc, char* argv[]) {
 		new_fd = accept(sockfd, (struct sockaddr *) &their_addr, &addr_size);
 		thread_args_t *args = (thread_args_t*) malloc(sizeof(thread_args_t));
 		args->sock = new_fd;
-		run(args);
-		close(socket);
+		pthread_t thread;
+		status = pthread_create(&thread, NULL, run, (void*)args);
+		if (status) {
+			printf("pthread_create error: %d\n", status);
+		}
 	}
 
 	pthread_exit(NULL);
