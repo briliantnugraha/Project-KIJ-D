@@ -37,8 +37,9 @@ namespace Chat_clien
 
         private void button1_Click(object sender, EventArgs e)
         {
-            clientSocket.Connect("127.0.0.1", 8888);
-            label1.Text = "Client Socket Program - Server Connected ...";
+            String IP = ipServer.Text;
+            String port = portServer.Text;
+            clientSocket.Connect(IP, Convert.ToInt32(port));
             serverStream = clientSocket.GetStream();
             Thread th = new Thread(getmsg);
             th.Start(); 
@@ -50,14 +51,14 @@ namespace Chat_clien
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            clientSocket.Close();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             serverStream = clientSocket.GetStream();
             
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(Pesan.Text + "$");
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(nama+": "+Pesan.Text + "$");
 
             serverStream.Write(outStream, 0, outStream.Length);  //memberikan tulisan ke server
 
@@ -91,7 +92,21 @@ namespace Chat_clien
             if (this.InvokeRequired)    //mengambil message secara mutex
                 this.Invoke(new MethodInvoker(() => msg(mesg)));
             else
-               listBox1.Items.Add(mesg);
+            {
+                char[] sep=new char[1];
+                sep[0]=' ';
+                var word = mesg.Split(sep);
+                if (String.Compare(word[0], "!CONNECT") == 0)
+                    listBox2.Items.Add(word[1]);
+                else if (String.Compare(word[0], "NOPE") == 0)
+                    clientSocket.Close();
+                else if (String.Compare(word[0], "!DISCONNECT") == 0)
+                {
+                    listBox2.Items.Remove(word[1]);
+                }
+                else
+                    listBox1.Items.Add(mesg);
+            }
         }
     }
 }
