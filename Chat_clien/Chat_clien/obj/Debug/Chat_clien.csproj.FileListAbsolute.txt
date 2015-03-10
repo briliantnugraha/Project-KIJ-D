@@ -8,3 +8,12 @@ E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\bin\Debug\Chat_clien.
 E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\bin\Debug\Chat_clien.pdb
 E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\obj\Debug\Chat_clien.exe
 E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\obj\Debug\Chat_clien.pdb
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\bin\Debug\Chat_clien.exe.config
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.exe
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.pdb
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\bin\Debug\Chat_clien.exe
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\bin\Debug\Chat_clien.pdb
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csprojResolveAssemblyReference.cache
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.Form1.resources
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.Properties.Resources.resources
+E:\Ryan\Kuliah\Semester 6\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csproj.GenerateResource.Cache
