@@ -45,6 +45,7 @@
             this.Pesan = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.Penerima = new System.Windows.Forms.TextBox();
+            this.output = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -206,11 +207,20 @@
             this.Penerima.Size = new System.Drawing.Size(100, 20);
             this.Penerima.TabIndex = 0;
             // 
+            // output
+            // 
+            this.output.FormattingEnabled = true;
+            this.output.Location = new System.Drawing.Point(406, 32);
+            this.output.Name = "output";
+            this.output.Size = new System.Drawing.Size(249, 303);
+            this.output.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 347);
+            this.ClientSize = new System.Drawing.Size(667, 343);
+            this.Controls.Add(this.output);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.button2);
@@ -249,6 +259,7 @@
         private System.Windows.Forms.TextBox Pesan;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox Penerima;
+        private System.Windows.Forms.ListBox output;
     }
 }
 

@@ -16,3 +16,12 @@ E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\obj\Debug\Chat_clien.
 E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csproj.GenerateResource.Cache
 E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\obj\Debug\Chat_clien.exe
 E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\obj\Debug\Chat_clien.pdb
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\bin\Debug\Chat_clien.exe.config
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.exe
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.pdb
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\bin\Debug\Chat_clien.exe
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\bin\Debug\Chat_clien.pdb
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.Form1.resources
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.Properties.Resources.resources
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csproj.GenerateResource.Cache
+C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csprojResolveAssemblyReference.cache

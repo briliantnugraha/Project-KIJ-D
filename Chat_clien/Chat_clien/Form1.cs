@@ -20,7 +20,7 @@ namespace Chat_clien
         System.Net.Sockets.TcpClient clientSocket = new System.Net.Sockets.TcpClient();
         NetworkStream serverStream;
         Thread th;
-        TcpListener listensocket = new TcpListener(8888);
+        //TcpListener listensocket = new TcpListener(8888);
         public Form1()
         {
             InitializeComponent();
@@ -58,9 +58,12 @@ namespace Chat_clien
 
         private void button3_Click(object sender, EventArgs e)
         {
+            //rc4 pesanx = new rc4();
+            string pesany = rc4.encrypt_rc4(Pesan.Text, "budi");
+
             serverStream = clientSocket.GetStream();
             
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(Penerima.Text+":"+Pesan.Text + "\r\n\0");
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(Penerima.Text+":"+pesany + "\r\n\0");
 
             serverStream.Write(outStream, 0, outStream.Length);  //memberikan tulisan ke server
 
@@ -77,7 +80,7 @@ namespace Chat_clien
             {
                 serverStream = clientSocket.GetStream();
 
-                byte[] inStream = new byte[10023];
+                byte[] inStream = new byte[65537];
 
                 int Buff = clientSocket.ReceiveBufferSize;
 
@@ -95,6 +98,7 @@ namespace Chat_clien
                 this.Invoke(new MethodInvoker(() => msg(mesg)));
             else
             {
+                output.Items.Add(mesg);
                 char[] sep=new char[4];
                 sep[0]=' ';
                 sep[1] = '\r';
@@ -124,7 +128,11 @@ namespace Chat_clien
 
                 }
                 else
-                    listBox1.Items.Add(mesg);
+                {
+                    string pesany = rc4.encrypt_rc4(word[1], "budi");
+                    listBox1.Items.Add(pesany);
+                }
+                    
             }
         }
 
