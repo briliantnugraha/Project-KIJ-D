@@ -25,3 +25,4 @@ C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Cha
 C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.Properties.Resources.resources
 C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csproj.GenerateResource.Cache
 C:\Users\Asus\Documents\GitHub\Project-KIJ-D\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csprojResolveAssemblyReference.cache
+E:\Ryan\Kuliah\Semester 6\KIJ\GitHub\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csprojResolveAssemblyReference.cache

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 using System.Net;
 using System.Net.Sockets;
@@ -16,6 +17,10 @@ namespace Chat_clien
 {
     public partial class Form1 : Form
     {
+        UnicodeEncoding ByteConverter = new UnicodeEncoding();
+        RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+        byte[] plaintext;
+        byte[] encryptedtext; 
         String nama;
         System.Net.Sockets.TcpClient clientSocket = new System.Net.Sockets.TcpClient();
         NetworkStream serverStream;
@@ -24,6 +29,43 @@ namespace Chat_clien
         public Form1()
         {
             InitializeComponent();
+        }
+
+        static public byte[] Encryption(byte[] Data, RSAParameters RSAKey, bool DoOAEPPadding)
+        {
+            try
+                {
+                    byte[] encryptedData;
+                    using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
+                        {
+                            RSA.ImportParameters(RSAKey); encryptedData = RSA.Encrypt(Data, DoOAEPPadding);
+                        } 
+                    return encryptedData;
+                }
+            catch (CryptographicException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+        }
+
+        static public byte[] Decryption(byte[] Data, RSAParameters RSAKey, bool DoOAEPPadding)
+        {
+            try
+                {
+                    byte[] decryptedData;
+                    using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
+                        {
+                            RSA.ImportParameters(RSAKey);
+                            decryptedData = RSA.Decrypt(Data, DoOAEPPadding);
+                        }
+                    return decryptedData;
+                }
+            catch (CryptographicException e)
+                {
+                    Console.WriteLine(e.ToString());
+                    return null;
+                }
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -59,6 +101,7 @@ namespace Chat_clien
         private void button3_Click(object sender, EventArgs e)
         {
             //rc4 pesanx = new rc4();
+            // RSA di sini
             string pesany = rc4.encrypt_rc4(Pesan.Text, "budi");
 
             serverStream = clientSocket.GetStream();
@@ -88,12 +131,15 @@ namespace Chat_clien
 
                 string returndata = System.Text.Encoding.ASCII.GetString(inStream);
 
+                string plain = ByteConverter.GetString(Decryption(ByteConverter.GetBytes(returndata), RSA.ExportParameters(true), false));
+                
                 msg(returndata);
             }
         }
 
         public void msg(string mesg)
         {
+            
             if (this.InvokeRequired)    //mengambil message secara mutex
                 this.Invoke(new MethodInvoker(() => msg(mesg)));
             else
