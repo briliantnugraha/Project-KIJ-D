@@ -12,13 +12,17 @@ using System.Security.Cryptography;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.IO;
 
 namespace Chat_clien
 {
     public partial class Form1 : Form
     {
+        int stat = 0;
+        Dictionary<string, int> KeySim= new Dictionary<string, int>();
+        string publicKey = "";
+        string privateKey = "",publicKeyB; 
         UnicodeEncoding ByteConverter = new UnicodeEncoding();
-        RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
         byte[] plaintext;
         byte[] encryptedtext; 
         String nama;
@@ -29,43 +33,6 @@ namespace Chat_clien
         public Form1()
         {
             InitializeComponent();
-        }
-
-        static public byte[] Encryption(byte[] Data, RSAParameters RSAKey, bool DoOAEPPadding)
-        {
-            try
-                {
-                    byte[] encryptedData;
-                    using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
-                        {
-                            RSA.ImportParameters(RSAKey); encryptedData = RSA.Encrypt(Data, DoOAEPPadding);
-                        } 
-                    return encryptedData;
-                }
-            catch (CryptographicException e)
-                {
-                    Console.WriteLine(e.Message);
-                    return null;
-                }
-        }
-
-        static public byte[] Decryption(byte[] Data, RSAParameters RSAKey, bool DoOAEPPadding)
-        {
-            try
-                {
-                    byte[] decryptedData;
-                    using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
-                        {
-                            RSA.ImportParameters(RSAKey);
-                            decryptedData = RSA.Decrypt(Data, DoOAEPPadding);
-                        }
-                    return decryptedData;
-                }
-            catch (CryptographicException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    return null;
-                }
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -80,7 +47,7 @@ namespace Chat_clien
 
         private void button1_Click(object sender, EventArgs e)
         {
-            String IP = ipServer.Text;
+            /*String IP = ipServer.Text;
             String port = portServer.Text;
             clientSocket.Connect(IP, Convert.ToInt32(port));
             serverStream = clientSocket.GetStream();
@@ -89,7 +56,10 @@ namespace Chat_clien
             nama = Pengirim.Text;
             ipServer.Text = "";
             portServer.Text = "";
-            Pengirim.Text = "";
+            Pengirim.Text = "";*/
+            //RSA
+            Keys();
+          //  Kirim(publicKey);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -101,20 +71,27 @@ namespace Chat_clien
         private void button3_Click(object sender, EventArgs e)
         {
             //rc4 pesanx = new rc4();
-            // RSA di sini
+ 
             string pesany = rc4.encrypt_rc4(Pesan.Text, "budi");
 
-            serverStream = clientSocket.GetStream();
-            
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(Penerima.Text+":"+pesany + "\r\n\0");
+            pesany = Penerima.Text + ":" + pesany;
 
-            serverStream.Write(outStream, 0, outStream.Length);  //memberikan tulisan ke server
-
-            serverStream.Flush();
+            Kirim(pesany);
 
             listBox1.Items.Add(nama + ":" + Pesan.Text);
             Pesan.Text = "";
 
+        }
+
+        private void Kirim(string pesany)
+        {
+             serverStream = clientSocket.GetStream();
+            
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(pesany + "\r\n\0");
+
+            serverStream.Write(outStream, 0, outStream.Length);  //memberikan tulisan ke server
+
+            serverStream.Flush();
         }
 
         private void getmsg()   //mengambil message dari server
@@ -131,8 +108,6 @@ namespace Chat_clien
 
                 string returndata = System.Text.Encoding.ASCII.GetString(inStream);
 
-                string plain = ByteConverter.GetString(Decryption(ByteConverter.GetBytes(returndata), RSA.ExportParameters(true), false));
-                
                 msg(returndata);
             }
         }
@@ -164,14 +139,25 @@ namespace Chat_clien
                 }
                 else if (String.Compare(word[0], "OK") == 0)
                 {
-                    serverStream = clientSocket.GetStream();
-
-                    byte[] outStream = System.Text.Encoding.ASCII.GetBytes(nama + "\r\n\0");
-
-                    serverStream.Write(outStream, 0, outStream.Length);  //memberikan tulisan ke server
-
-                    serverStream.Flush();
-
+                    if (stat == 0)
+                    {
+                        Kirim(nama + " " + publicKey);
+                        stat = 1;
+                    }
+                }
+                else if(String.Compare(word[0],"!KeyPu")==0)
+                {
+                    publicKeyB = word[2];
+                    Random rnd = new Random();
+                    KeySim.Add(word[1], rnd.Next(1, 255));
+                    //RSA
+                    Kirim("!KeySi" + word[1] + " "); //+enkrip keysim
+                }
+                else if(String.Compare(word[0],"!KeySi")==0)
+                {
+                    //decrypt RSA
+                    int key = Convert.ToInt32(word[2]);
+                    KeySim.Add(word[1], key);
                 }
                 else
                 {
@@ -184,12 +170,42 @@ namespace Chat_clien
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Penerima.Text = Convert.ToString(listBox2.SelectedItem);
+            string SiB= Convert.ToString(listBox2.SelectedItem);
+            Penerima.Text = SiB;
+            Kirim("!Get "+SiB);
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Penerima.Text = Convert.ToString(listBox1.SelectedItem);
+        }
+
+        void Keys()
+        {
+            CspParameters cspParams = null;
+            RSACryptoServiceProvider rsaProvider = null;
+            StreamWriter publicKeyFile = null;
+            try
+            {
+                cspParams = new CspParameters();
+                cspParams.ProviderType = 1; // PROV_RSA_FULL 
+                //cspParams.ProviderName; // CSP name
+                cspParams.Flags = CspProviderFlags.UseArchivableKey;
+                cspParams.KeyNumber = (int)KeyNumber.Exchange;
+                rsaProvider = new RSACryptoServiceProvider(cspParams);
+
+                publicKey = rsaProvider.ToXmlString(false);
+                privateKey = rsaProvider.ToXmlString(true);
+
+                MessageBox.Show(Convert.ToString(publicKey.Length) + " " + Convert.ToString(privateKey.Length));
+            }
+            catch (Exception ex)
+            {
+                // Any errors? Show them
+                Console.WriteLine("Exception generating a new key pair! More info:");
+                Console.WriteLine(ex.Message);
+            }
+           
         }
     }
 }
