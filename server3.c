@@ -188,7 +188,7 @@ void *run(void *t_args) {
 			if (strcmp(temp, "GET") == 0) {
 				i += 1;
 				//--NCAT DEBUGGING BEGIN, HARAP DI-DELETE!!!!
-					buf[bytes-1] = 0;
+				//	buf[bytes-1] = 0;
 				//--NCAT DEBUGGING END
 				strcpy(temp, buf+i); //temp akan berisi nama klien yang public keynya di-request
 				Klien *k = search(temp, daftarKlien);
