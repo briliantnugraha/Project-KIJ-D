@@ -209,6 +209,7 @@ void *run(void *t_args) {
 				send(args->sock, buf, strlen(buf), 0);
 			}
 			if (strcmp(temp, "KEYSI") == 0) {
+				printf("KEYSI\n");
 				i += 1;
 				j = 0;
 				char sym_key[CIPHER_LEN];
@@ -217,8 +218,10 @@ void *run(void *t_args) {
 					temp[j] = buf[i];
 					i++;
 					j++;
+					printf("i: %d, j: %d, buf[%d]: %c", i, j, i, buf[i]);
 				}
-				temp[i] = 0;
+				temp[j] = 0;
+				printf("temp: %s", temp);
 				Klien *k = search(temp, daftarKlien);
 				if (k == NULL) {
 					//kalau kien tidak ditemukan
