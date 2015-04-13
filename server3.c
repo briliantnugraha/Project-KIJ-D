@@ -67,6 +67,7 @@ void insert(const char *nama, const char *key, int sock, Klien **node) {
 	if (*node == NULL) {
 		*node = (Klien*) malloc(sizeof(Klien));
 		strcpy((*node)->nama, nama);
+		strcpy((*node)->public_key, key);
 		(*node)->sock = sock;
 		(*node)->next = NULL;
 	}
@@ -169,20 +170,26 @@ void *run(void *t_args) {
 // Inisialisasi selesai
 //-------------------------------------------------------------------------
 	while((bytes = recv(args->sock, buf, BUF_SIZ-1, 0)) > 0) {
-		printf("%s!\n", nama);
 		buf[bytes] = 0;
 		printf("%s: %s\n", nama, buf);
+		printf("--");
 		if(buf[0] == '!') {
 			printf("<Command>");
 			i = 1;
+			j = 0;
 			while ((i < bytes) && isAlphaNumeric(buf[i])) {
-				temp[i] = buf[i];
+				temp[j] = buf[i];
 				i++;
+				j++;
 			}
-			temp[i] = 0;
+			temp[j] = 0;
+			printf(" (%s) ", temp);
 			//kalau !GET
 			if (strcmp(temp, "GET") == 0) {
 				i += 1;
+				//--NCAT DEBUGGING BEGIN, HARAP DI-DELETE!!!!
+					buf[bytes-1] = 0;
+				//--NCAT DEBUGGING END
 				strcpy(temp, buf+i); //temp akan berisi nama klien yang public keynya di-request
 				Klien *k = search(temp, daftarKlien);
 				if (k == NULL) {
@@ -202,12 +209,14 @@ void *run(void *t_args) {
 				send(args->sock, buf, strlen(buf), 0);
 			}
 			if (strcmp(temp, "KEYSI") == 0) {
-				i += 1, j = 0;
+				i += 1;
+				j = 0;
 				char sym_key[CIPHER_LEN];
 				//ambil nama klien tujuan
 				while ((i < bytes) && isAlphaNumeric(buf[i])) {
 					temp[j] = buf[i];
-					i++, j++;
+					i++;
+					j++;
 				}
 				temp[i] = 0;
 				Klien *k = search(temp, daftarKlien);
@@ -242,6 +251,7 @@ void *run(void *t_args) {
 			sprintf(buf, "%s: %s", nama, msg);
 			send(k->sock, buf, strlen(buf), 0);
 		}
+		printf("END\n");
 	}
 
 
