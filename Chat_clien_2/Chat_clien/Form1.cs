@@ -20,7 +20,9 @@ namespace Chat_clien
     public partial class Form1 : Form
     {
         int stat = 0;
+        Dictionary<string, bool> isWaitingKey = new Dictionary<string, bool>();
         Dictionary<string,string> KeySim = new Dictionary<string,string>();
+        Dictionary<string, RSAParameters> KeyPub = new Dictionary<string, RSAParameters>();
         RSACryptoServiceProvider rsaProvider = null,rsa2=new RSACryptoServiceProvider();
         RSAParameters parameters,parameters2;
         string publicKey = "";
@@ -62,8 +64,16 @@ namespace Chat_clien
             Pengirim.Text = "";
             Keys();
             rsaProvider = new RSACryptoServiceProvider();
-            rsaProvider.ImportParameters(parameters2);
-            
+            rsaProvider.ImportParameters(parameters);
+            /*
+            byte[] something = rsaProvider.SignData(Encoding.ASCII.GetBytes("halo"), new SHA1CryptoServiceProvider());
+            string somethingb64 = System.Convert.ToBase64String(something);
+            MessageBox.Show(somethingb64);
+            var rsaProvider2 = new RSACryptoServiceProvider();
+            rsaProvider2.ImportParameters(parameters2);
+            var verified = rsaProvider2.VerifyData(Encoding.ASCII.GetBytes("halo"), new SHA1CryptoServiceProvider(), something);
+            MessageBox.Show(verified ? "Verified" : "Not Verified");
+            */
             /*
             byte[] enkrip = rsaProvider.Encrypt(System.Text.Encoding.ASCII.GetBytes("123456789"), false);
             string enkrips = System.Text.Encoding.ASCII.GetString(enkrip);
@@ -87,6 +97,11 @@ namespace Chat_clien
             string pesany = System.Convert.ToBase64String(rc4.encrypt_rc4(bytePesan, KeySim[Penerima.Text]));
 
             pesany = Penerima.Text + ": " + pesany;
+            rsaProvider = new RSACryptoServiceProvider();
+            rsaProvider.ImportParameters(parameters);
+            String signature = System.Convert.ToBase64String(rsaProvider.SignData(bytePesan, new SHA1CryptoServiceProvider()));
+
+            pesany = pesany + " " + signature;
 
             Kirim(pesany);
 
@@ -148,6 +163,8 @@ namespace Chat_clien
                 else if (String.Compare(word[0], "!DISCONNECT") == 0)
                 {
                     listBox2.Items.Remove(word[1]);
+                    KeySim.Remove(word[1]);
+                    KeyPub.Remove(word[1]);
                 }
                 else if (String.Compare(word[0], "OK") == 0)
                 {
@@ -162,22 +179,25 @@ namespace Chat_clien
                         Penerima.Enabled = true;
                         Pesan.Enabled = true;
                     }
-                }
+                }   
                 else if(String.Compare(word[0],"!KEYPU")==0)
                 {
                     publicKeyB = word[2];
-                    Random rnd = new Random();
-                    string keysi=Convert.ToString(rnd.Next(1, 255));
-                    KeySim.Add(word[1],keysi);
                     //RSA
                     rsaProvider = new RSACryptoServiceProvider();
                     rsaProvider.FromXmlString(word[2]);
-                    byte[] enkrip=rsaProvider.Encrypt(System.Text.Encoding.ASCII.GetBytes(keysi), false);
-                    //string enkrips = System.Text.Encoding.ASCII.GetString(enkrip);
-                    string enkrips = System.Convert.ToBase64String(enkrip);
-                 //   MessageBox.Show(enkrips + "\n" + dekrips);
-                    Kirim("!KEYSI " + word[1] + " " + enkrips);
-                    //MessageBox.Show(keysi);
+                    KeyPub.Add(word[1], rsaProvider.ExportParameters(false));
+                    if (isWaitingKey.ContainsKey(word[1]))
+                    {
+                        Random rnd = new Random();
+                        string keysi = Convert.ToString(rnd.Next(1, 255));
+                        KeySim.Add(word[1], keysi);
+                        byte[] enkrip = rsaProvider.Encrypt(System.Text.Encoding.ASCII.GetBytes(keysi), false);
+                        string enkrips = System.Convert.ToBase64String(enkrip);
+                        Kirim("!KEYSI " + word[1] + " " + enkrips);
+                        isWaitingKey.Remove(word[1]);
+                    }
+                    
                 }
                 else if(String.Compare(word[0],"!KEYSI")==0)
                 {
@@ -192,8 +212,14 @@ namespace Chat_clien
                 else
                 {
                     string nama = word[0].Substring(0, word[0].Length - 1);
+                    byte[] signature = System.Convert.FromBase64String(word[2]);
                     string pesany = Encoding.ASCII.GetString(rc4.encrypt_rc4(System.Convert.FromBase64String(word[1]), KeySim[nama]));
-                    listBox1.Items.Add(word[0] + ": " + pesany);
+                    var verifier = new RSACryptoServiceProvider();
+                    verifier.ImportParameters(KeyPub[nama]);
+                    if (verifier.VerifyData(Encoding.ASCII.GetBytes(pesany), new SHA1CryptoServiceProvider(), signature))
+                    {
+                        listBox1.Items.Add(word[0] + " " + pesany);
+                    }
                 }
                     
             }
@@ -203,12 +229,17 @@ namespace Chat_clien
         {
             string SiB= Convert.ToString(listBox2.SelectedItem);
             Penerima.Text = SiB;
-            if(!KeySim.ContainsKey(SiB))
-                Kirim("!GET "+SiB);
+            if (!KeySim.ContainsKey(SiB))
+            {
+                Kirim("!GET " + SiB);
+                isWaitingKey.Add(Penerima.Text, true);
+            }
+            /*
             else
             {
                 MessageBox.Show("punya");
             }
+             */
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)

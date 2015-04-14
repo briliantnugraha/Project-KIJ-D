@@ -10,8 +10,8 @@
 #define BUF_SIZ 500
 #define BACKLOG 10
 #define MAX_NAMELEN 51
-#define KEY_LEN 256
-#define CIPHER_LEN 257
+#define KEY_LEN 500
+#define CIPHER_LEN 500
 
 typedef struct {
 	int sock;
@@ -194,14 +194,16 @@ void *run(void *t_args) {
 				Klien *k = search(temp, daftarKlien);
 				//kalau klien tidak ditemukan
 				if (k == NULL) {
-					strcpy(buf, "!NONAME");
-					send(args->sock, buf, strlen(buf), 0);
+					//strcpy(buf, "!NONAME");
+					//send(args->sock, buf, strlen(buf), 0);
 					continue;
 				}
 				//kirim nama klien dan public key-nya
 				printf(" GET %s\n", temp);
 				sprintf(buf, "!KEYPU %s %s", temp, k->public_key);
 				send(args->sock, buf, strlen(buf), 0);
+				sprintf(buf, "!KEYPU %s %s", nama, key);
+				send(k->sock, buf, strlen(buf), 0);
 			}
 			if (strcmp(temp, "KEYSI") == 0) {
 				printf("KEYSI\n");
