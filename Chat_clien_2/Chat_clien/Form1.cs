@@ -34,7 +34,7 @@ namespace Chat_clien
         Thread th;
         //TcpListener listensocket = new TcpListener(8888);
         public Form1()
-        {
+        {   
             InitializeComponent();
         }
 
@@ -83,10 +83,10 @@ namespace Chat_clien
         private void button3_Click(object sender, EventArgs e)
         {
             //rc4 pesanx = new rc4();
- 
-            string pesany = rc4.encrypt_rc4(Pesan.Text, "budi");
+            byte[] bytePesan = Encoding.ASCII.GetBytes(Pesan.Text);
+            string pesany = System.Convert.ToBase64String(rc4.encrypt_rc4(bytePesan, KeySim[Penerima.Text]));
 
-            pesany = Penerima.Text + ":" + pesany;
+            pesany = Penerima.Text + ": " + pesany;
 
             Kirim(pesany);
 
@@ -173,22 +173,27 @@ namespace Chat_clien
                     rsaProvider = new RSACryptoServiceProvider();
                     rsaProvider.FromXmlString(word[2]);
                     byte[] enkrip=rsaProvider.Encrypt(System.Text.Encoding.ASCII.GetBytes(keysi), false);
-                    string enkrips = System.Text.Encoding.ASCII.GetString(enkrip);
+                    //string enkrips = System.Text.Encoding.ASCII.GetString(enkrip);
+                    string enkrips = System.Convert.ToBase64String(enkrip);
                  //   MessageBox.Show(enkrips + "\n" + dekrips);
-                    Kirim("!KEYSI" + word[1]);
+                    Kirim("!KEYSI " + word[1] + " " + enkrips);
+                    //MessageBox.Show(keysi);
                 }
                 else if(String.Compare(word[0],"!KEYSI")==0)
                 {
                     //decrypt RSA
                     rsaProvider=new RSACryptoServiceProvider();
                     rsaProvider.ImportParameters(parameters);
-                    byte[] dekrip = rsaProvider.Decrypt(System.Text.Encoding.ASCII.GetBytes(word[2]), false);
+                    //byte[] dekrip = rsaProvider.Decrypt(System.Text.Encoding.ASCII.GetBytes(word[2]), false);
+                    byte[] dekrip = rsaProvider.Decrypt(System.Convert.FromBase64String(word[2]), false);
                     string dekrips = System.Text.Encoding.ASCII.GetString(dekrip);
-                    KeySim.Add(word[1],dekrips);
+                    //MessageBox.Show(dekrips);
                 }
                 else
                 {
-                    string pesany = rc4.encrypt_rc4(word[1], KeySim[word[0]]);
+                    string nama = word[0].Substring(0, word[0].Length - 1);
+                    MessageBox.Show(word[1]);
+                    string pesany = Encoding.ASCII.GetString(rc4.encrypt_rc4(System.Convert.FromBase64String(word[1]), KeySim[nama]));
                     listBox1.Items.Add(pesany);
                 }
                     

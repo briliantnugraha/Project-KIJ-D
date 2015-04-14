@@ -35,3 +35,12 @@ C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csp
 C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.Form1.resources
 C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.Properties.Resources.resources
 C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien\Chat_clien\obj\Debug\Chat_clien.csproj.GenerateResource.Cache
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\bin\Debug\Chat_clien.exe.config
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\obj\Debug\Chat_clien.exe
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\obj\Debug\Chat_clien.pdb
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\bin\Debug\Chat_clien.exe
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\bin\Debug\Chat_clien.pdb
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\obj\Debug\Chat_clien.csprojResolveAssemblyReference.cache
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\obj\Debug\Chat_clien.Form1.resources
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\obj\Debug\Chat_clien.Properties.Resources.resources
+C:\Users\Wik\Documents\Kuliah\KIJ\Chat_clien_2\Chat_clien\obj\Debug\Chat_clien.csproj.GenerateResource.Cache
