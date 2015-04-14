@@ -187,14 +187,13 @@ namespace Chat_clien
                     //byte[] dekrip = rsaProvider.Decrypt(System.Text.Encoding.ASCII.GetBytes(word[2]), false);
                     byte[] dekrip = rsaProvider.Decrypt(System.Convert.FromBase64String(word[2]), false);
                     string dekrips = System.Text.Encoding.ASCII.GetString(dekrip);
-                    //MessageBox.Show(dekrips);
+                    KeySim.Add(word[1],dekrips);
                 }
                 else
                 {
                     string nama = word[0].Substring(0, word[0].Length - 1);
-                    MessageBox.Show(word[1]);
                     string pesany = Encoding.ASCII.GetString(rc4.encrypt_rc4(System.Convert.FromBase64String(word[1]), KeySim[nama]));
-                    listBox1.Items.Add(pesany);
+                    listBox1.Items.Add(word[0] + ": " + pesany);
                 }
                     
             }
