@@ -144,6 +144,7 @@
             // 
             // listBox2
             // 
+            this.listBox2.Enabled = false;
             this.listBox2.FormattingEnabled = true;
             this.listBox2.Location = new System.Drawing.Point(297, 120);
             this.listBox2.Name = "listBox2";
@@ -186,6 +187,7 @@
             // 
             // Pesan
             // 
+            this.Pesan.Enabled = false;
             this.Pesan.Location = new System.Drawing.Point(75, 46);
             this.Pesan.Name = "Pesan";
             this.Pesan.Size = new System.Drawing.Size(306, 20);
@@ -202,6 +204,7 @@
             // 
             // Penerima
             // 
+            this.Penerima.Enabled = false;
             this.Penerima.Location = new System.Drawing.Point(75, 19);
             this.Penerima.Name = "Penerima";
             this.Penerima.Size = new System.Drawing.Size(100, 20);

@@ -13,13 +13,16 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Chat_clien
 {
     public partial class Form1 : Form
     {
         int stat = 0;
-        Dictionary<string, int> KeySim= new Dictionary<string, int>();
+        Dictionary<string,string> KeySim = new Dictionary<string,string>();
+        RSACryptoServiceProvider rsaProvider = null,rsa2=new RSACryptoServiceProvider();
+        RSAParameters parameters,parameters2;
         string publicKey = "";
         string privateKey = "",publicKeyB; 
         UnicodeEncoding ByteConverter = new UnicodeEncoding();
@@ -47,7 +50,7 @@ namespace Chat_clien
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*String IP = ipServer.Text;
+            String IP = ipServer.Text;
             String port = portServer.Text;
             clientSocket.Connect(IP, Convert.ToInt32(port));
             serverStream = clientSocket.GetStream();
@@ -56,10 +59,17 @@ namespace Chat_clien
             nama = Pengirim.Text;
             ipServer.Text = "";
             portServer.Text = "";
-            Pengirim.Text = "";*/
-            //RSA
+            Pengirim.Text = "";
             Keys();
-          //  Kirim(publicKey);
+            rsaProvider = new RSACryptoServiceProvider();
+            rsaProvider.ImportParameters(parameters2);
+            byte[] enkrip = rsaProvider.Encrypt(System.Text.Encoding.ASCII.GetBytes("123456789"), false);
+            string enkrips = System.Text.Encoding.ASCII.GetString(enkrip);
+            byte[] dekrip = rsaProvider.Decrypt(enkrip, false);
+            string dekrips = System.Text.Encoding.ASCII.GetString(dekrip);
+            MessageBox.Show(enkrips + "\n" + dekrips);
+                    
+            Kirim(publicKey);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -87,7 +97,7 @@ namespace Chat_clien
         {
              serverStream = clientSocket.GetStream();
             
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(pesany + "\r\n\0");
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(pesany);
 
             serverStream.Write(outStream, 0, outStream.Length);  //memberikan tulisan ke server
 
@@ -144,24 +154,39 @@ namespace Chat_clien
                         Kirim(nama + " " + publicKey);
                         stat = 1;
                     }
+                    else
+                    {
+                        listBox2.Enabled = true;
+                        Penerima.Enabled = true;
+                        Pesan.Enabled = true;
+                    }
                 }
-                else if(String.Compare(word[0],"!KeyPu")==0)
+                else if(String.Compare(word[0],"!KEYPU")==0)
                 {
                     publicKeyB = word[2];
                     Random rnd = new Random();
-                    KeySim.Add(word[1], rnd.Next(1, 255));
+                    string keysi=Convert.ToString(rnd.Next(1, 255));
+                    KeySim.Add(word[1],keysi);
                     //RSA
-                    Kirim("!KeySi" + word[1] + " "); //+enkrip keysim
+                    rsaProvider = new RSACryptoServiceProvider();
+                    rsaProvider.FromXmlString(word[2]);
+                    byte[] enkrip=rsaProvider.Encrypt(System.Text.Encoding.ASCII.GetBytes(keysi), false);
+                    string enkrips = System.Text.Encoding.ASCII.GetString(enkrip);
+                 //   MessageBox.Show(enkrips + "\n" + dekrips);
+                    Kirim("!KEYSI" + word[1]);
                 }
-                else if(String.Compare(word[0],"!KeySi")==0)
+                else if(String.Compare(word[0],"!KEYSI")==0)
                 {
                     //decrypt RSA
-                    int key = Convert.ToInt32(word[2]);
-                    KeySim.Add(word[1], key);
+                    rsaProvider=new RSACryptoServiceProvider();
+                    rsaProvider.ImportParameters(parameters);
+                    byte[] dekrip = rsaProvider.Decrypt(System.Text.Encoding.ASCII.GetBytes(word[2]), false);
+                    string dekrips = System.Text.Encoding.ASCII.GetString(dekrip);
+                    KeySim.Add(word[1],dekrips);
                 }
                 else
                 {
-                    string pesany = rc4.encrypt_rc4(word[1], "budi");
+                    string pesany = rc4.encrypt_rc4(word[1], KeySim[word[0]]);
                     listBox1.Items.Add(pesany);
                 }
                     
@@ -172,7 +197,12 @@ namespace Chat_clien
         {
             string SiB= Convert.ToString(listBox2.SelectedItem);
             Penerima.Text = SiB;
-            Kirim("!Get "+SiB);
+            if(!KeySim.ContainsKey(SiB))
+                Kirim("!Get "+SiB);
+            else
+            {
+                MessageBox.Show("punya");
+            }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -183,7 +213,6 @@ namespace Chat_clien
         void Keys()
         {
             CspParameters cspParams = null;
-            RSACryptoServiceProvider rsaProvider = null;
             StreamWriter publicKeyFile = null;
             try
             {
@@ -193,11 +222,11 @@ namespace Chat_clien
                 cspParams.Flags = CspProviderFlags.UseArchivableKey;
                 cspParams.KeyNumber = (int)KeyNumber.Exchange;
                 rsaProvider = new RSACryptoServiceProvider(cspParams);
+                
+                parameters = rsaProvider.ExportParameters(true);
+                parameters2 = rsaProvider.ExportParameters(false);
 
-                publicKey = rsaProvider.ToXmlString(false);
-                privateKey = rsaProvider.ToXmlString(true);
-
-                MessageBox.Show(Convert.ToString(publicKey.Length) + " " + Convert.ToString(privateKey.Length));
+                publicKey = rsaProvider.ToXmlString(true);
             }
             catch (Exception ex)
             {
