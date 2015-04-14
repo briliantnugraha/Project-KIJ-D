@@ -146,6 +146,7 @@ void *run(void *t_args) {
 			send(node->sock, buf, strlen(buf), 0);
 			node = node->next;
 		}
+		sleep(1);
 		//Kirim daftar klien ke klien yang baru konek
 		Klien *iterator = daftarKlien;
 		while (iterator != NULL) {
