@@ -192,17 +192,12 @@ void *run(void *t_args) {
 				//--NCAT DEBUGGING END
 				strcpy(temp, buf+i); //temp akan berisi nama klien yang public keynya di-request
 				Klien *k = search(temp, daftarKlien);
+				//kalau klien tidak ditemukan
 				if (k == NULL) {
-					continue;
-				}
-				/*
-				if (k == NULL) {
-					//kalau klien tidak ditemukan
-					strcpy(buf, "NOPE");
+					strcpy(buf, "!NONAME");
 					send(args->sock, buf, strlen(buf), 0);
 					continue;
 				}
-				*/
 				//kirim nama klien dan public key-nya
 				printf(" GET %s\n", temp);
 				sprintf(buf, "!KEYPU %s %s", temp, k->public_key);
